@@ -24,6 +24,10 @@ chexpert_dataloader = DataLoader(chexpert_dataset, batch_size=batch_size, shuffl
 chexpert_examples = enumerate(chexpert_dataloader)
 batch_idx, (chexpert_sources, chexpert_targets) = next(chexpert_examples) 
 
+diseases=['No Finding', 'Atelectasis','Cardiomegaly','Consolidation','Edema',
+    'Enlarged Cardiomediastinum','Fracture','Lung Lesion','Lung Opacity',
+    'Pleural Effusion','Pneumonia','Pneumothorax','Pleural Other',
+    'Support Devices']
 
 mimic_data_dir="/data/jliang12/jpang12/dataset/MIMIC_jpeg"
 
@@ -31,6 +35,7 @@ mimic_dataset = MIMIC_CXR(
         dataset_directory=mimic_data_dir, 
         partition="train",
         augment=build_transform_classification(normalize=default_normalization, mode="train"),
+        diseases=diseases,
         from_modality="image", 
         to_modality="chexpert",
         annotation_percent=default_annotation_percent, 
