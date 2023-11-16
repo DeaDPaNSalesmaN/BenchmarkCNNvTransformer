@@ -34,6 +34,8 @@ def get_args_parser():
     parser.add_option("--img_size", dest="img_size", help="input image resolution", default=224, type="int")
     parser.add_option("--img_depth", dest="img_depth", help="num of image depth", default=3, type="int")
     parser.add_option("--data_dir", dest="data_dir", help="dataset dir",default=None, type="string")
+    parser.add_option("--models_dir", dest="models_dir", help="model dir",default="./Models/Classification", type="string")
+    parser.add_option("--output_dir", dest="output_dir", help="output dir",default="./Outputs/Classification", type="string")
     parser.add_option("--train_list", dest="train_list", help="file for training list",
                       default=None, type="string")
     parser.add_option("--val_list", dest="val_list", help="file for validating list",
@@ -107,7 +109,7 @@ def get_args_parser():
                       default="LSR-Ones", type="string")
     parser.add_option("--unknown_label", dest="unknown_label", help="the label assigned to unknown data",
                       default=0, type="int")
-
+    #parser.add_option("--skip_resize", dest="skip_resize", help="skip image resizing",default=False, action="callback", callback=vararg_callback_bool) #causes errors even for ConVneXt
 
     (options, args) = parser.parse_args()
 
@@ -123,8 +125,10 @@ def main(args):
     #if args.init.lower() != 'imagenet' and args.init.lower() != 'random':
     #    assert args.proxy_dir is not None
     args.exp_name = args.model_name + "_" + args.init + args.exp_name
-    model_path = os.path.join("./Models/Classification",args.data_set)
-    output_path = os.path.join("./Outputs/Classification",args.data_set)
+    model_path = os.path.join(args.models_dir,args.data_set)
+    #model_path = os.path.join("./Models/Classification",args.data_set)
+    output_path = os.path.join(args.output_dir,args.data_set)
+    #output_path = os.path.join("./Outputs/Classification",args.data_set)
 
     if args.data_set == "ChestXray14":
         diseases = ['Atelectasis', 'Cardiomegaly', 'Effusion', 'Infiltration', 'Mass', 'Nodule',
@@ -147,14 +151,30 @@ def main(args):
                            'Pleural Effusion', 'Pleural Other', 'Fracture', 'Support Devices']
         test_diseases_name = ['Atelectasis', 'Cardiomegaly', 'Consolidation', 'Edema', 'Pleural Effusion']
         test_diseases = [diseases.index(c) for c in test_diseases_name]
-        dataset_train = CheXpertDataset(images_path=args.data_dir, file_path=args.train_list,
-                                        augment=build_transform_classification(normalize=args.normalization, mode="train"), uncertain_label=args.uncertain_label, unknown_label=args.unknown_label, annotation_percent=args.anno_percent)
+        dataset_train = CheXpertDataset(
+            images_path=args.data_dir, 
+            file_path=args.train_list,
+            augment=build_transform_classification(normalize=args.normalization, mode="train"), 
+            uncertain_label=args.uncertain_label, 
+            unknown_label=args.unknown_label, 
+            annotation_percent=args.anno_percent
+            )
 
-        dataset_val = CheXpertDataset(images_path=args.data_dir, file_path=args.val_list,
-                                      augment=build_transform_classification(normalize=args.normalization, mode="valid"), uncertain_label=args.uncertain_label, unknown_label=args.unknown_label)
+        dataset_val = CheXpertDataset(
+            images_path=args.data_dir, 
+            file_path=args.val_list,                                      
+            augment=build_transform_classification(normalize=args.normalization, mode="valid"), 
+            uncertain_label=args.uncertain_label, 
+            unknown_label=args.unknown_label
+            )
 
-        dataset_test = CheXpertDataset(images_path=args.data_dir, file_path=args.test_list,
-                                       augment=build_transform_classification(normalize=args.normalization, mode="test"), uncertain_label=args.uncertain_label, unknown_label=args.unknown_label)
+        dataset_test = CheXpertDataset(
+            images_path=args.data_dir, 
+            file_path=args.test_list,
+            augment=build_transform_classification(normalize=args.normalization, mode="test"), 
+            uncertain_label=args.uncertain_label, 
+            unknown_label=args.unknown_label
+            )
 
         classification_engine(args, model_path, output_path, diseases, dataset_train, dataset_val, dataset_test, test_diseases)
 
@@ -185,6 +205,7 @@ def main(args):
 
 
         classification_engine(args, model_path, output_path, diseases, dataset_train, dataset_val, dataset_test)
+        
     elif args.data_set == "RSNAPneumonia":
         diseases = ['Normal', 'No Lung Opacity/Not Normal', 'Lung Opacity']
         dataset_train = RSNAPneumonia(images_path=args.data_dir, file_path=args.train_list,
@@ -196,6 +217,51 @@ def main(args):
         dataset_test = RSNAPneumonia(images_path=args.data_dir, file_path=args.test_list,
                                    augment=build_transform_classification(normalize=args.normalization, mode="test"))
 
+
+        classification_engine(args, model_path, output_path, diseases, dataset_train, dataset_val, dataset_test)
+
+    elif args.data_set == "MIMIC_CXR":
+        diseases=['No Finding', 'Atelectasis','Cardiomegaly','Consolidation','Edema',
+            'Enlarged Cardiomediastinum','Fracture','Lung Lesion','Lung Opacity',
+            'Pleural Effusion','Pneumonia','Pneumothorax','Pleural Other',
+            'Support Devices']
+
+        
+        dataset_train = MIMIC_CXR(
+            dataset_directory=args.data_dir, 
+            partition="train",
+            augment=build_transform_classification(normalize=args.normalization, mode="train", skip_resize=args.skip_resize),
+	    diseases=diseases,
+            from_modality="image", 
+            to_modality="chexpert",
+            annotation_percent=args.anno_percent, 
+            uncertain_label=args.uncertain_label, 
+            unknown_label=args.unknown_label
+        )
+
+        dataset_val = MIMIC_CXR(
+            dataset_directory=args.data_dir, 
+            partition="validate",
+            augment=build_transform_classification(normalize=args.normalization, mode="valid", skip_resize=args.skip_resize),
+	    diseases=diseases,
+            from_modality="image", 
+            to_modality="chexpert",
+            annotation_percent=args.anno_percent, 
+            uncertain_label=args.uncertain_label, 
+            unknown_label=args.unknown_label
+        )        
+        
+        dataset_test = MIMIC_CXR(
+            dataset_directory=args.data_dir, 
+            partition="test",
+            augment=build_transform_classification(normalize=args.normalization, mode="test", skip_resize=args.skip_resize),
+	    diseases=diseases,
+            from_modality="image", 
+            to_modality="chexpert",
+            annotation_percent=args.anno_percent, 
+            uncertain_label=args.uncertain_label, 
+            unknown_label=args.unknown_label
+        )         
 
         classification_engine(args, model_path, output_path, diseases, dataset_train, dataset_val, dataset_test)
 
