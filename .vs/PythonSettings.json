@@ -1,0 +1,4 @@
+{
+  "Interpreter": "CondaEnv|CondaEnv|BenchmarkCNNvTransformer",
+  "TestFramework": "Pytest"
+}
