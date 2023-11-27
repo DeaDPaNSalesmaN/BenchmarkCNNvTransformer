@@ -1,4 +1,5 @@
 {
   "Interpreter": "CondaEnv|CondaEnv|BenchmarkCNNvTransformer",
-  "TestFramework": "Pytest"
+  "TestFramework": "Pytest",
+  "SuppressEnvironmentCreationPrompt": true
 }

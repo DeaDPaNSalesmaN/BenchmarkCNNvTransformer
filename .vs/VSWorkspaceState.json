@@ -1,8 +1,10 @@
 {
   "ExpandedNodes": [
     "",
-    "\\dataset"
+    "\\slurm",
+    "\\slurm\\slurm_files",
+    "\\slurm\\slurm_files\\cnnvtran_chexpert_scratch_swin_100_224_exp01"
   ],
-  "SelectedNode": "\\models.py",
+  "SelectedNode": "\\slurm\\slurm_files\\cnnvtran_chexpert_scratch_swin_100_224_exp01\\cnnvtran_chexpert_scratch_swin_100_224_exp01.sh",
   "PreviewInSolutionExplorer": false
 }
