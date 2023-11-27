@@ -66,8 +66,11 @@ for experiment in experiments:
         file.writelines("# Load required modules for job's environment\n")
         file.writelines("module load mamba/latest\n")
         file.writelines("# Using python, so source activate an appropriate environment\n")
-        file.writelines("source activate BenchmarkingTransformers\n\n")
-        
+        file.writelines("source activate BenchmarkingTransformers\n")
+        file.writelines("#navigate to project directory\n")
+        file.writelines("cd /data/jliang12/ayanan/Projects/BenchmarkCNNvTransformer \n\n")
+
+
         file.writelines("python main_classification.py \\\n")
         file.writelines("\t --data_set {} \\\n".format(experiment['data_set']))
         file.writelines("\t --model {} \\\n".format(experiment['model']))
