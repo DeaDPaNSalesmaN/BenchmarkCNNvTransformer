@@ -109,8 +109,7 @@ def get_args_parser():
                       default="LSR-Ones", type="string")
     parser.add_option("--unknown_label", dest="unknown_label", help="the label assigned to unknown data",
                       default=0, type="int")
-    parser.add_option("--skip_resize", dest="skip_resize", help="skip image resizing",default=False, action="callback", callback=vararg_callback_bool) #causes errors even for ConVneXt
-
+    
     (options, args) = parser.parse_args()
 
     return options
@@ -230,7 +229,7 @@ def main(args):
         dataset_train = MIMIC_CXR(
             dataset_directory=args.data_dir, 
             partition="train",
-            augment=build_transform_classification(normalize=args.normalization, mode="train", skip_resize=args.skip_resize),
+            augment=build_transform_classification(normalize=args.normalization, mode="train"),
 	        diseases=diseases,
             from_modality="image", 
             to_modality="chexpert",
@@ -242,7 +241,7 @@ def main(args):
         dataset_val = MIMIC_CXR(
             dataset_directory=args.data_dir, 
             partition="validate",
-            augment=build_transform_classification(normalize=args.normalization, mode="valid", skip_resize=args.skip_resize),
+            augment=build_transform_classification(normalize=args.normalization, mode="valid"),
 	        diseases=diseases,
             from_modality="image", 
             to_modality="chexpert",
@@ -254,7 +253,7 @@ def main(args):
         dataset_test = MIMIC_CXR(
             dataset_directory=args.data_dir, 
             partition="test",
-            augment=build_transform_classification(normalize=args.normalization, mode="test", skip_resize=args.skip_resize),
+            augment=build_transform_classification(normalize=args.normalization, mode="test"),
 	        diseases=diseases,
             from_modality="image", 
             to_modality="chexpert",
