@@ -109,7 +109,7 @@ def get_args_parser():
                       default="LSR-Ones", type="string")
     parser.add_option("--unknown_label", dest="unknown_label", help="the label assigned to unknown data",
                       default=0, type="int")
-    #parser.add_option("--skip_resize", dest="skip_resize", help="skip image resizing",default=False, action="callback", callback=vararg_callback_bool) #causes errors even for ConVneXt
+    parser.add_option("--skip_resize", dest="skip_resize", help="skip image resizing",default=False, action="callback", callback=vararg_callback_bool) #causes errors even for ConVneXt
 
     (options, args) = parser.parse_args()
 

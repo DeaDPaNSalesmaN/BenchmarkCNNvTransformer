@@ -3,8 +3,8 @@
     "",
     "\\slurm",
     "\\slurm\\slurm_files",
-    "\\slurm\\slurm_files\\cnnvtran_chexpert_scratch_swin_100_224_exp01"
+    "\\slurm\\slurm_files\\cnnvtran_chexpert_ImageNet22k_convnext_100_224_exp01"
   ],
-  "SelectedNode": "\\slurm\\slurm_files\\cnnvtran_chexpert_scratch_swin_100_224_exp01\\cnnvtran_chexpert_scratch_swin_100_224_exp01.sh",
+  "SelectedNode": "\\engine.py",
   "PreviewInSolutionExplorer": false
 }
