@@ -510,7 +510,7 @@ class MIMIC_CXR(Dataset):
             self.mimic_data = []
 
             for i in indexes:
-                self.img_list.append(_mimic_data[i])
+                self.mimic_data.append(_mimic_data[i])
     
     def __getitem__(self, index):
         mimic_data = self.mimic_data[index]
