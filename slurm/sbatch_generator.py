@@ -24,6 +24,13 @@ parser.add_argument(
     help="when specified, the jobs will be submitted after supporting files are created",
     action="store_true"
     )
+
+parser.add_argument(
+    "--experiment_tag",
+    dest="experiment_tag",
+    help="string appended to the experiment in case you want to run new trials with the same setup",
+    default = "test"
+    )
     
 args = parser.parse_args()
 
@@ -42,6 +49,7 @@ print(experiments[0])
 
 for experiment in experiments:
     #make folder for experiment
+    experiment['experiment'] = experiment['experiment'] + args.experiment_tag
     experiment_directory = os.path.join(args.slurm_directory, experiment['experiment'])
     os.makedirs(experiment_directory, exist_ok=True)
     
