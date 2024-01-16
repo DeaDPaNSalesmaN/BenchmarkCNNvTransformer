@@ -96,6 +96,7 @@ for experiment in experiments:
         file.writelines("\t --GPU {} \\\n".format(experiment['GPU']))
         file.writelines("\t --workers {} \\\n".format(experiment['workers']))
         file.writelines("\t --models_dir {} \\\n".format(experiment['models_dir']))
+        file.writelines("\t --anno_percent {} \\\n".format(experiment['anno_percent']))
         file.writelines("\t --resume true")
         
     #submit sbatch script
