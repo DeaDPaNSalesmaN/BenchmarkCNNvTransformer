@@ -1,10 +1,6 @@
 {
   "ExpandedNodes": [
-    "",
-    "\\slurm",
-    "\\slurm\\slurm_files",
-    "\\slurm\\slurm_files\\cnnvtran_chexpert_ImageNet22k_convnext_100_224_exp01"
+    ""
   ],
-  "SelectedNode": "\\engine.py",
   "PreviewInSolutionExplorer": false
 }

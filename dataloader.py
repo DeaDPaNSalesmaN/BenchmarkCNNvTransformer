@@ -143,7 +143,7 @@ class ChestXray14Dataset(Dataset):
 
 # ---------------------------------------------Downstream CheXpert------------------------------------------
 class CheXpertDataset(Dataset):
-
+  image_count = 224316
   def __init__(self, images_path, file_path, augment, num_class=14,
                uncertain_label="LSR-Ones", unknown_label=0, annotation_percent=100):
 
@@ -367,7 +367,7 @@ class RSNAPneumonia(Dataset):
 
 # ---------------------------------------------MIMIC Dataset------------------------------------------
 class MIMIC_CXR(Dataset):
-
+    image_count = 377110
     def label_reorganize(self, goal_meta_list, current_meta_list, label_list):
         labels = []
         for i, disease in enumerate(goal_meta_list):
